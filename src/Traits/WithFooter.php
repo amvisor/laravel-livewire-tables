@@ -4,6 +4,7 @@ namespace Rappasoft\LaravelLivewireTables\Traits;
 
 use Rappasoft\LaravelLivewireTables\Traits\Configuration\FooterConfiguration;
 use Rappasoft\LaravelLivewireTables\Traits\Helpers\FooterHelpers;
+use Rappasoft\LaravelLivewireTables\Views\Column;
 
 trait WithFooter
 {
@@ -19,7 +20,7 @@ trait WithFooter
     public function setupFooter(): void
     {
         foreach ($this->getColumns() as $column) {
-            if ($column->hasFooter()) {
+            if ($column instanceof Column && $column->hasFooter()) {
                 $this->columnsWithFooter = true;
             }
         }

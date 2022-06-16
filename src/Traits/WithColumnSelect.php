@@ -4,6 +4,7 @@ namespace Rappasoft\LaravelLivewireTables\Traits;
 
 use Rappasoft\LaravelLivewireTables\Traits\Configuration\ColumnSelectConfiguration;
 use Rappasoft\LaravelLivewireTables\Traits\Helpers\ColumnSelectHelpers;
+use Rappasoft\LaravelLivewireTables\Views\Column;
 
 trait WithColumnSelect
 {
@@ -40,7 +41,10 @@ trait WithColumnSelect
 
         // Check to see if there are any excluded that are already stored in the enabled and remove them
         foreach ($this->getColumns() as $column) {
-            if (! $column->isSelectable() && ! in_array($column->getHash(), $this->selectedColumns, true)) {
+            if ($column instanceof Column
+                && ! $column->isSelectable()
+                && ! in_array($column->getHash(), $this->selectedColumns, true)
+            ) {
                 $this->selectedColumns[] = $column->getHash();
                 session([$this->getColumnSelectSessionKey() => $this->selectedColumns]);
             }

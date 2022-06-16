@@ -4,6 +4,7 @@ namespace Rappasoft\LaravelLivewireTables\Traits\Helpers;
 
 use Illuminate\Support\Collection;
 use Rappasoft\LaravelLivewireTables\Views\Column;
+use Rappasoft\LaravelLivewireTables\Views\ColumnGroup;
 
 trait ColumnHelpers
 {
@@ -13,8 +14,11 @@ trait ColumnHelpers
     public function setColumns(): void
     {
         $columns = collect($this->columns())
-            ->filter(fn ($column) => $column instanceof Column)
-            ->map(function (Column $column) {
+            ->filter(fn ($column) => $column instanceof Column || $column instanceof ColumnGroup)
+            ->map(function (Column|ColumnGroup $column) {
+                if ($column instanceof ColumnGroup) {
+                    return $column;
+                }
                 $column->setComponent($this);
 
                 if ($column->hasField()) {
@@ -93,7 +97,7 @@ trait ColumnHelpers
     public function getSelectableColumns(): Collection
     {
         return $this->getColumns()
-            ->reject(fn (Column $column) => $column->isLabel())
+            ->reject(fn (Column|ColumnGroup $column) => $column instanceof ColumnGroup || $column->isLabel())
             ->values();
     }
 
@@ -103,7 +107,7 @@ trait ColumnHelpers
     public function getSearchableColumns(): Collection
     {
         return $this->getColumns()
-            ->filter(fn (Column $column) => $column->isSearchable() || $column->hasSearchCallback())
+            ->filter(fn (Column|ColumnGroup $column) => $column instanceof Column && ($column->isSearchable() || $column->hasSearchCallback()))
             ->values();
     }
 
@@ -137,7 +141,7 @@ trait ColumnHelpers
     public function getCollapsedMobileColumns(): Collection
     {
         return $this->getColumns()
-            ->filter(fn (Column $column) => $column->shouldCollapseOnMobile())
+            ->filter(fn (Column|ColumnGroup $column) => $column instanceof Column && $column->shouldCollapseOnMobile())
             ->values();
     }
 
@@ -155,7 +159,7 @@ trait ColumnHelpers
     public function getVisibleMobileColumns(): Collection
     {
         return $this->getColumns()
-            ->reject(fn (Column $column) => $column->shouldCollapseOnMobile())
+            ->reject(fn (Column|ColumnGroup $column) => $column instanceof Column && $column->shouldCollapseOnMobile())
             ->values();
     }
 
@@ -181,7 +185,7 @@ trait ColumnHelpers
     public function getCollapsedTabletColumns(): Collection
     {
         return $this->getColumns()
-            ->filter(fn (Column $column) => $column->shouldCollapseOnTablet())
+            ->filter(fn (Column|ColumnGroup $column) => $column instanceof Column && $column->shouldCollapseOnTablet())
             ->values();
     }
 
@@ -232,5 +236,16 @@ trait ColumnHelpers
         }
 
         return $all;
+    }
+
+    public function hasColumnGroups(): bool
+    {
+        foreach ($this->columns as $column) {
+            if ($column instanceof ColumnGroup) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

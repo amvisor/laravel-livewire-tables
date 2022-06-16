@@ -11,6 +11,11 @@
             <x-livewire-tables::table.th.bulk-actions />
             <x-livewire-tables::table.th.row-contents />
 
+            @if ($this->hasColumnGroups())
+                @foreach ($columns as $index => $column)
+                    <x-livewire-tables::table.th.group :columnGroup="$column" :index="$index" />
+                @endforeach
+            @endif
             @foreach($columns as $index => $column)
                 @continue($column->isHidden())
                 @continue($this->columnSelectIsEnabled() && ! $this->columnSelectIsEnabledForColumn($column))

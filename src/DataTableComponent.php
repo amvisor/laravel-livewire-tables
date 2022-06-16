@@ -41,10 +41,10 @@ abstract class DataTableComponent extends Component
 
     protected $listeners = [
         'refreshDatatable' => '$refresh',
-        'setSort' => 'setSortEvent',
-        'clearSorts' => 'clearSortEvent',
-        'setFilter' => 'setFilterEvent',
-        'clearFilters' => 'clearFilterEvent',
+        'setSort'          => 'setSortEvent',
+        'clearSorts'       => 'clearSortEvent',
+        'setFilter'        => 'setFilterEvent',
+        'clearFilters'     => 'clearFilterEvent',
     ];
 
     /**
@@ -110,7 +110,7 @@ abstract class DataTableComponent extends Component
     {
         return 'livewire-tables::stubs.custom';
     }
-    
+
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */

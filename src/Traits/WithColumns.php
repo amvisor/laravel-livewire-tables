@@ -4,6 +4,7 @@ namespace Rappasoft\LaravelLivewireTables\Traits;
 
 use Illuminate\Support\Collection;
 use Rappasoft\LaravelLivewireTables\Traits\Helpers\ColumnHelpers;
+use Rappasoft\LaravelLivewireTables\Views\ColumnGroup;
 
 trait WithColumns
 {

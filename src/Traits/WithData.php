@@ -13,7 +13,7 @@ trait WithData
     public function getRows()
     {
         $this->baseQuery();
-        
+
         return $this->executeQuery();
     }
 
@@ -46,7 +46,7 @@ trait WithData
     protected function joinRelations(): Builder
     {
         foreach ($this->getSelectableColumns() as $column) {
-            if ($column->hasRelations()) {
+            if ($column instanceof Column && $column->hasRelations()) {
                 $this->setBuilder($this->joinRelation($column));
             }
         }
